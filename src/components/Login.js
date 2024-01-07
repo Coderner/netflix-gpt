@@ -12,7 +12,7 @@ const Login = () => {
 
   const toggleSignInForm = () =>{
     setIsSignInForm(!isSignInForm);
-    {!isSignInForm && (fullName.current.value="")};
+    !isSignInForm && (fullName.current.value="");
     email.current.value="";
     password.current.value="";
     setValidateResponse({});
