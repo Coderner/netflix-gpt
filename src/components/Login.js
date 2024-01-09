@@ -28,9 +28,6 @@ const Login = () => {
   const handleButtonClick = () =>{
      if(isSignInForm){
         setValidateResponse(checkValidateData(undefined,email.current.value,password.current.value));
-        if(!(validateResponse.emailError==="" && validateResponse.passwordError==="")){
-          return;
-        }
         signInWithEmailAndPassword(auth, email.current.value, password.current.value)
         .then((userCredential) => {
           const user = userCredential.user;
@@ -47,9 +44,6 @@ const Login = () => {
      }
      else{
         setValidateResponse(checkValidateData(fullName.current.value,email.current.value,password.current.value));
-        if(!(validateResponse.fullNameError==="" && validateResponse.emailError==="" && validateResponse.passwordError==="")){
-          return;
-        }
         createUserWithEmailAndPassword(
           auth, 
           email.current.value, 
