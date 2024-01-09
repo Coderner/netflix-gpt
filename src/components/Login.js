@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import BackgroundImage from '../images/background.jpg'
 import { checkValidateData } from '../utils/validate'
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import {auth} from '../utils/firebase'
+import { useDispatch } from 'react-redux'
+import { addUser } from '../utils/userSlice'
 
 const Login = () => {
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSignInForm, setIsSignInForm] = useState(true);
   const fullName = useRef(null);
@@ -51,12 +53,20 @@ const Login = () => {
         createUserWithEmailAndPassword(
           auth, 
           email.current.value, 
-          password.current.value
+          password.current.value,
           )
          .then((userCredential) => {
            const user = userCredential.user;
-           console.log(user);
-           navigate("/browse");
+           updateProfile(user, {
+               displayName:fullName.current.value , 
+               photoURL: "https://example.com/jane-q-user/profile.jpg"
+             }).then(() => {
+                const {uid,email, displayName, photoURL} = auth.currentUser;
+                dispatch(addUser({uid:uid, email:email, displayName:displayName, photoURL:photoURL}));
+                navigate("/browse");
+             }).catch((error) => {
+               
+             });
          })
          .catch((error) => {
            const errorCode = error.code;
