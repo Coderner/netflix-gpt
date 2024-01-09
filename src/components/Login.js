@@ -62,12 +62,14 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <div className='h-full w-full'>
         <Header/>
-        <div className='absolute'>
-           <img src={BackgroundImage} alt="background"/>
+        <div className='absolute h-full w-full'>
+           <img src={BackgroundImage} alt="background" className='h-full w-full'/>
         </div>
-        <form onSubmit={(e)=> e.preventDefault()} className="relative mx-auto top-36 px-20 py-16 w-2/5 flex flex-col bg-black/90 rounded-md">
+        <form 
+          onSubmit={(e)=> e.preventDefault()} 
+          className="relative mx-auto top-36 px-8 sm:px-20 py-10 xl:py-16 w-4/5 sm:w-3/5 md:w-1/2 xl:w-2/5 flex flex-col bg-black/90 rounded-md">
             <h1 className='text-white text-3xl font-semibold mb-5'>
                 {isSignInForm? "Sign In" : "Sign Up"}
             </h1>
