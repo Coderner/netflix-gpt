@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import BackgroundImage from '../images/background.jpg'
 import { checkValidateData } from '../utils/validate'
@@ -6,6 +7,8 @@ import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'fireba
 import {auth} from '../utils/firebase'
 
 const Login = () => {
+
+  const navigate = useNavigate();
   const [isSignInForm, setIsSignInForm] = useState(true);
   const fullName = useRef(null);
   const email = useRef(null);
@@ -30,6 +33,7 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user)
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -52,6 +56,7 @@ const Login = () => {
          .then((userCredential) => {
            const user = userCredential.user;
            console.log(user);
+           navigate("/browse");
          })
          .catch((error) => {
            const errorCode = error.code;
