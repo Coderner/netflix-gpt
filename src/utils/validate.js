@@ -5,7 +5,9 @@ export const checkValidateData = (fullName,email,password) =>{
     passwordError:""
   }
   
-  if(!fullName)
+  if(fullName===undefined)
+     {}
+  else if(!fullName)
      error.fullNameError = "Name can't be empty";
   else if(fullName.length<4)
      error.fullNameError = "Name is too short must be atleast 4 characters";

@@ -16,6 +16,7 @@ const Login = () => {
   const email = useRef(null);
   const password = useRef(null);
   const [validateResponse,setValidateResponse] = useState({});
+  const [authError,setAuthError] = useState("");
 
   const toggleSignInForm = () =>{
     setIsSignInForm(!isSignInForm);
@@ -23,32 +24,29 @@ const Login = () => {
     email.current.value="";
     password.current.value="";
     setValidateResponse({});
+    setAuthError("");
   }
 
   const handleButtonClick = () =>{
+     const errors = checkValidateData((isSignInForm?undefined:fullName.current.value),email.current.value,password.current.value);
+     setValidateResponse(errors);
+     console.log(errors);
+     if(!(errors.emailError==="" && errors.fullNameError==="" && errors.passwordError==="")) return;
+       
      if(isSignInForm){
-        setValidateResponse(checkValidateData(undefined,email.current.value,password.current.value));
-        signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user)
-          navigate("/browse");
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode);
-          console.log(errorMessage);
-          setValidateResponse({passwordError:errorCode})
-        });
-     }
+          signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user)
+            navigate("/browse");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            setAuthError(errorCode);
+          });
+        }
      else{
-        setValidateResponse(checkValidateData(fullName.current.value,email.current.value,password.current.value));
-        createUserWithEmailAndPassword(
-          auth, 
-          email.current.value, 
-          password.current.value,
-          )
+         createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
          .then((userCredential) => {
            const user = userCredential.user;
            updateProfile(user, {
@@ -58,16 +56,13 @@ const Login = () => {
                 const {uid,email, displayName, photoURL} = auth.currentUser;
                 dispatch(addUser({uid:uid, email:email, displayName:displayName, photoURL:photoURL}));
                 navigate("/browse");
-             }).catch((error) => {
-               
-             });
+             }).catch((error) => {});
          })
          .catch((error) => {
            const errorCode = error.code;
-           const errorMessage = error.message;
-           console.log(errorCode+"-"+errorMessage);
+           setAuthError(errorCode);
          });
-     }
+        }
   }
 
   return (
@@ -107,6 +102,7 @@ const Login = () => {
               className="px-4 py-2 my-2 rounded-md bg-[#333333] text-white"
             />
              <p className="text-sm font-medium text-[#cf0e07]">{validateResponse.passwordError}</p>
+             <p className="text-sm font-medium text-[#cf0e07]">{authError}</p>
             <button 
               className="p-2 mt-7 mb-5 bg-[#cf0e07] text-white px-4 py-2 rounded-md"
               onClick={handleButtonClick}
