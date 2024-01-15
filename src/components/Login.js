@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import BackgroundImage from '../images/background.jpg'
 import { checkValidateData } from '../utils/validate'
@@ -10,7 +9,6 @@ import { addUser } from '../utils/userSlice'
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [isSignInForm, setIsSignInForm] = useState(true);
   const fullName = useRef(null);
   const email = useRef(null);
@@ -38,7 +36,6 @@ const Login = () => {
           .then((userCredential) => {
             const user = userCredential.user;
             console.log(user)
-            navigate("/browse");
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -55,7 +52,6 @@ const Login = () => {
              }).then(() => {
                 const {uid,email, displayName, photoURL} = auth.currentUser;
                 dispatch(addUser({uid:uid, email:email, displayName:displayName, photoURL:photoURL}));
-                navigate("/browse");
              }).catch((error) => {});
          })
          .catch((error) => {
